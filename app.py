@@ -153,4 +153,11 @@ if __name__ == "__main__":
         "Starting server on http://%s:%d (debug=%s)", host, port, debug
     )
 
-    socketio.run(app, host=host, port=port, debug=debug, use_reloader=False)
+    socketio.run(
+    app,
+    host=host,
+    port=port,
+    debug=debug,
+    use_reloader=False,
+    allow_unsafe_werkzeug=True,
+)
