@@ -1,0 +1,358 @@
+/* =========================================================================
+   US Market Dashboard — stylesheet
+   ========================================================================= */
+
+/* ----- Reset & base ----- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+:root {
+  --bg:            #0d1117;
+  --bg-panel:      #161b22;
+  --bg-controls:   #1c2128;
+  --bg-input:      #21262d;
+  --border:        #30363d;
+  --text-primary:  #e6edf3;
+  --text-muted:    #8b949e;
+  --text-label:    #b1bac4;
+  --accent:        #388bfd;
+  --green:         #26a69a;
+  --green-flash:   rgba(38, 166, 154, 0.35);
+  --red:           #ef5350;
+  --red-flash:     rgba(239, 83, 80, 0.35);
+  --toolbar-h:     52px;
+  --radius:        6px;
+  --transition:    0.15s ease;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+}
+
+/* =========================================================================
+   Toolbar
+   ========================================================================= */
+
+.toolbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--toolbar-h);
+  z-index: 100;
+  background: var(--bg-panel);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  gap: 12px;
+}
+
+.toolbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.brand-icon {
+  width: 20px; height: 20px;
+  stroke: var(--accent);
+}
+
+.brand-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.toolbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toolbar-label {
+  color: var(--text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.toolbar-select {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition);
+}
+.toolbar-select:hover,
+.toolbar-select:focus { border-color: var(--accent); }
+
+/* Connection badge */
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: background var(--transition), border-color var(--transition);
+}
+.badge-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.badge-connecting { background: rgba(56,139,253,0.1); border-color: rgba(56,139,253,0.3); color: #388bfd; }
+.badge-connecting .badge-dot { background: #388bfd; animation: pulse 1.2s infinite; }
+
+.badge-live { background: rgba(38,166,154,0.1); border-color: rgba(38,166,154,0.3); color: #26a69a; }
+.badge-live .badge-dot { background: #26a69a; }
+
+.badge-error { background: rgba(239,83,80,0.1); border-color: rgba(239,83,80,0.3); color: #ef5350; }
+.badge-error .badge-dot { background: #ef5350; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* =========================================================================
+   Grid container — layout variants
+   ========================================================================= */
+
+#grid-container {
+  position: fixed;
+  top: var(--toolbar-h);
+  left: 0; right: 0; bottom: 0;
+  display: grid;
+  gap: 2px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+/* 1 pane — full screen */
+#grid-container.grid-1 {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+/* 2 panes — 1 row × 2 cols */
+#grid-container.grid-2 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+/* 4 panes — 2 rows × 2 cols */
+#grid-container.grid-4 {
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+/* 6 panes — 2 rows × 3 cols */
+#grid-container.grid-6 {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+/* 8 panes — 2 rows × 4 cols */
+#grid-container.grid-8 {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+/* =========================================================================
+   Individual chart pane
+   ========================================================================= */
+
+.chart-pane {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-panel);
+  overflow: hidden;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ----- Ticker bar ----- */
+.ticker-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: var(--bg-controls);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  transition: background 0.05s ease;
+  user-select: none;
+}
+
+.ticker-symbol {
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+  min-width: 52px;
+}
+
+.ticker-price {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.ticker-change {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+
+/* Tick flash animations */
+@keyframes flash-green {
+  0%, 100% { background: var(--bg-controls); }
+  40%       { background: var(--green-flash); }
+}
+@keyframes flash-red {
+  0%, 100% { background: var(--bg-controls); }
+  40%       { background: var(--red-flash); }
+}
+
+.ticker-bar.flash-up   { animation: flash-green 0.55s ease forwards; }
+.ticker-bar.flash-down { animation: flash-red   0.55s ease forwards; }
+
+/* ----- Pane controls ----- */
+.pane-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  background: var(--bg-controls);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.ctrl-symbol {
+  flex: 1;
+  min-width: 80px;
+  max-width: 130px;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  outline: none;
+  transition: border-color var(--transition);
+  text-transform: uppercase;
+}
+.ctrl-symbol:focus { border-color: var(--accent); }
+
+.ctrl-interval {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color var(--transition);
+}
+.ctrl-interval:hover,
+.ctrl-interval:focus { border-color: var(--accent); }
+
+.ctrl-load {
+  background: var(--bg-input);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--transition), border-color var(--transition);
+}
+.ctrl-load:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ----- Chart area ----- */
+.chart-area {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+}
+
+/* Lightweight Charts injects a canvas; make it fill the container */
+.chart-area > * {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* ----- Loading overlay ----- */
+.pane-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 17, 23, 0.7);
+  z-index: 10;
+}
+
+.spinner {
+  width: 28px; height: 28px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ----- Error overlay ----- */
+.pane-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(13, 17, 23, 0.85);
+  color: var(--red);
+  font-size: 12px;
+  padding: 12px;
+  text-align: center;
+  z-index: 10;
+}
+
+/* =========================================================================
+   Responsive tweaks — narrow viewports collapse label text
+   ========================================================================= */
+
+@media (max-width: 480px) {
+  .brand-name   { display: none; }
+  .toolbar-label { display: none; }
+}

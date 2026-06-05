@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>US Market Dashboard</title>
+
+  <!-- TradingView Lightweight Charts v4.2.3 — pinned to avoid v5 breaking changes -->
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+
+  <!-- Socket.IO client -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- ===== Top toolbar ===== -->
+  <header class="toolbar">
+    <div class="toolbar-brand">
+      <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+        <polyline points="16 7 22 7 22 13"></polyline>
+      </svg>
+      <span class="brand-name">US Market Dashboard</span>
+    </div>
+
+    <div class="toolbar-controls">
+      <label class="toolbar-label" for="layout-select">Charts</label>
+      <select id="layout-select" class="toolbar-select">
+        <option value="1">1 — Full Screen</option>
+        <option value="2">2 — Side by Side</option>
+        <option value="4" selected>4 — 2 × 2 Grid</option>
+        <option value="6">6 — 3 × 2 Grid</option>
+        <option value="8">8 — 4 × 2 Grid</option>
+      </select>
+
+      <div id="connection-badge" class="badge badge-connecting">
+        <span class="badge-dot"></span>
+        <span class="badge-text">Connecting…</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Chart grid ===== -->
+  <main id="grid-container" class="grid-4">
+    <!-- Chart panes are injected dynamically by script.js -->
+  </main>
+
+  <!-- ===== Pane template (cloned by JS, not rendered directly) ===== -->
+  <template id="pane-template">
+    <div class="chart-pane">
+      <div class="ticker-bar">
+        <span class="ticker-symbol">—</span>
+        <span class="ticker-price">—</span>
+        <span class="ticker-change"></span>
+      </div>
+      <div class="pane-controls">
+        <input  class="ctrl-symbol"   type="text"   spellcheck="false" placeholder="Symbol (e.g. AAPL)" />
+        <select class="ctrl-interval">
+          <option value="1m">1m</option>
+          <option value="5m">5m</option>
+          <option value="15m">15m</option>
+          <option value="30m">30m</option>
+          <option value="1h">1h</option>
+          <option value="4h">4h</option>
+          <option value="1d" selected>1d</option>
+          <option value="1w">1w</option>
+        </select>
+        <button class="ctrl-load" title="Load chart">↺</button>
+      </div>
+      <div class="chart-area"></div>
+      <div class="pane-loading" hidden>
+        <div class="spinner"></div>
+      </div>
+      <div class="pane-error" hidden></div>
+    </div>
+  </template>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

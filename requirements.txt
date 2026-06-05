@@ -1,0 +1,6 @@
+flask>=3.0.0
+flask-socketio>=5.3.6
+flask-cors>=4.0.0
+yfinance>=0.2.50
+websocket-client>=1.7.0
+python-dotenv>=1.0.0
